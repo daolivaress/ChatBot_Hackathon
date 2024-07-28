@@ -1,0 +1,398 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  font-family: "DM Sans", sans-serif;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('icomoon.eot?cuuh3s');
+  src:  url('icomoon.eot?cuuh3s#iefix') format('embedded-opentype'),
+    url('icomoon.ttf?cuuh3s') format('truetype'),
+    url('icomoon.woff?cuuh3s') format('woff'),
+    url('icomoon.svg?cuuh3s#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak-as: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-moon:before {
+  content: "\e904";
+  font-size: 18px;
+}
+.icon-sun:before {
+  content: "\e903";
+  font-size: 16px;
+}
+.icon-weather:before {
+  content: "\e903";
+  font-size: 30px;
+}
+.icon-search:before {
+  content: "\e902";
+  font-size: 30px;
+}
+.icon-question-circle-o:before {
+  content: "\f29c";
+  font-size: 30px;
+  transition: 0.5s;
+}
+.icon-home-outline:before {
+  content: "\e900";
+  font-size: 30px;
+  transition: 0.5s;
+}
+.icon-history:before {
+  content: "\e901";
+  font-size: 30px;
+  transition: 0.5s;
+}
+
+.icon-sound-alt:before {
+  content: "\e906";
+}
+
+.icon-content_copy:before {
+  content: "\e905";
+}
+
+nav {
+  background-color: #f0f4f9;
+  width: fit-content;
+  height: 100vh;
+  padding: 0 1.2rem;
+
+}
+
+label {
+  width: 50px;
+  height: 25px;
+  position: relative;
+  display: block;
+  background: #ebebeb;
+  border-radius: 20px;
+  box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.2),
+    inset 0px -5px 15px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+label::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  background: linear-gradient(180deg, yellow, #d8860b);
+  border-radius: 18px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
+  transition: 0.3s;
+}
+
+#darkmode-toggle {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+#darkmode-toggle:checked + label {
+  background: #242424;
+}
+
+#darkmode-toggle:checked + label::after {
+  left: 7px;
+  transform: translateX(100%);
+  background: linear-gradient(180deg, #777, #3a3a3a);
+}
+
+label span {
+  position: absolute;
+  font-size: 12px;
+  top: 4px;
+  z-index: 100;
+}
+
+label .icon-sun {
+  left: 5.2px;
+  color: #fff;
+  transition: 0.3s;
+}
+
+label .icon-moon {
+  top: 3.5px;
+  left: 29px;
+  color: #7e7e7e;
+  transition: 0.3s;
+}
+
+#darkmode-toggle:checked + label .icon-sun {
+  color: #7e7e7e;
+}
+
+#darkmode-toggle:checked + label .icon-moon {
+  color: #fff;
+}
+
+main {
+  transition: 0.3s;
+}
+
+.sidebar {
+  list-style-type: none;
+  color: rgb(164, 163, 163);
+  margin-top: 1.5rem;
+}
+
+.items-item {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.items-item span {
+  cursor: pointer;
+}
+
+.items-item span.clicked {
+  color: black;
+}
+
+
+/* Contenido adicional al hacer hover o tener la clase clicked */
+.home:hover::after {
+  content: "Inicio";
+  margin-left: 10px;
+  margin-right: 8px;
+  font-weight: 600;
+}
+
+.faq:hover::after {
+  content: "Informacion";
+  margin-left: 10px;
+  margin-right: 8px;
+  font-weight: 600;
+}
+
+.historial:hover::after {
+  content: "Historial";
+  margin-left: 10px;
+  margin-right: 8px;
+  font-weight: 600;
+}
+
+.items-item:hover {
+  color: black;
+}
+
+.chat-container {
+  width: 89vw;
+  height: 85vh;
+  box-sizing: border-box;
+  position: relative;
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+}
+
+.start-banner {
+  padding: 3rem;
+  max-width: 80%;
+  margin-top: 8rem;
+}
+
+.prompt-container {
+  width: 89vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 2rem;
+}
+
+.prompt {
+  width: 90%;
+  padding: 0.9rem 1rem;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  border-bottom: 2px solid rgb(197, 196, 196);
+}
+
+.prompt:focus {
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, yellow, orange) border-box;
+  border-bottom: 2.2px solid transparent;
+}
+
+.prompt-submit {
+  background: none;
+  cursor: pointer;
+  position: relative;
+  border: none;
+  right: 45px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.hola {
+  font-size: 65px;
+  background: linear-gradient(yellow, orange);
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+.ayuda {
+  font-size: 30px;
+  color: #434343;
+  font-weight: 600;
+}
+
+.user-message,
+.bot-message {
+  margin-bottom: 20px;
+  max-width: 70%;
+}
+
+.user-message {
+  background-color: #f1f1f1;
+  padding: 10px 20px;
+  border-radius: 20px;
+  align-self: flex-end;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.bot-message {
+  padding: 10px 20px;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.bot-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  margin-right: 10px;
+  padding: 6px;
+  background: rgba(168, 165, 165, 0.2);
+}
+
+.bot-img-message {
+  display: flex;
+}
+
+.bot-actions {
+  text-align: right;
+}
+
+.bot-actions span {
+  margin-right: 10px;
+}
+
+.bot-actions span:hover {
+  padding: 6px;
+  border-radius: 4px;
+  background-color: rgba(168, 165, 165, 0.2);
+}
+
+.dark-mode body {
+  background-color: #333;
+  color: #f0f0f0;
+}
+
+.dark-mode nav {
+  background-color: #1a1a1a;
+}
+
+.dark-mode .sidebar {
+  color: #bbb;
+}
+
+.dark-mode main {
+  background-color: #242424;
+}
+
+.dark-mode .start-banner {
+  border-color: #444;
+}
+
+.dark-mode .prompt {
+  background-color: #242424;
+  color: #f0f0f0;
+  border-bottom-color: #555;
+}
+
+.dark-mode .prompt-submit {
+  color: rgb(187, 186, 186);
+}
+
+.dark-mode .items-item:hover {
+  color: #ffe600;
+}
+
+.dark-mode .items-item span.clicked {
+  color: #ffe600;
+}
+
+.dark-mode .prompt:focus {
+  background: linear-gradient(#242424, #242424) padding-box,
+    linear-gradient(to right, yellow, orange) border-box;
+  border-bottom: 2.2px solid transparent;
+}
+
+.dark-mode .bot-img {
+  background: #ffe600;
+}
+
+.dark-mode .user-message,
+.dark-mode .bot-message {
+  color: white;
+}
+
+.dark-mode .user-message {
+  background-color: #333;
+}
+
+.dark-mode .ayuda {
+  color: rgb(187, 186, 186);
+}
+
+.dark-mode .bot-actions {
+  color: #ffe600;;
+}
