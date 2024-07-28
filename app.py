@@ -2,11 +2,13 @@ from flask import Flask, request, jsonify
 import os
 import google.generativeai as genai
 import pandas as pd
+from config import API_KEY
+
 
 app = Flask(__name__)
 
 # Configurar la API de Google AI
-genai.configure(api_key="AIzaSyBoPmYeHtVbQ6_Pmx54C0Wjp88DOTh14qk")
+genai.configure(api_key=API_KEY)
 
 # Crear el modelo con la configuración sugerida
 generation_config = {
@@ -41,7 +43,7 @@ palabras_clave = [
     "informes", "gestión documental", "políticas", "términos", "estándares", "calidad", 
     "cumplimiento", "presupuesto", "tendencias de precios", "herramientas", "software", 
     "informes financieros", "tipo de cambio", "diferencias cambiarias", "vegetales", 
-    
+
     # Compras y Almacenamiento de Alimentos
     "adquisición", "ingredientes", "frescos", "envasados", "calidad", "productos", 
     "almacenamiento", "gestión", "inventarios",
