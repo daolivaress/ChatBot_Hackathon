@@ -38,10 +38,10 @@
   <main>
     <section>
       <div class="chat-container">
-        <div class="chat-messsages-container messages">
+        <div class="chat-messsages-container messages" id="chatBox">
           <div class="start-banner">
             <p class="hola">Hola...</p>
-            <p class="ayuda">¿En que puedo ayudarte?</p>
+            <p class="ayuda">¿En qué puedo ayudarte?</p>
           </div>
           <!--
           <div class="user-message">
@@ -95,14 +95,18 @@
         </div>
       </div>
       <div class="prompt-container">
-        <input type="text" class="prompt-input prompt" placeholder="Escribe tu mensaje.." />
-        <button type="submit" class="prompt-submit">
+        <input type="text" class="prompt-input prompt" id="userInput" placeholder="Escribe tu mensaje.." />
+        <button type="submit" onclick="sendMessage()" class="prompt-submit">
           <span class="icon-search"></span>
         </button>
       </div>
     </section>
   </main>
   <script src="assetts/fonts/style.js"></script>
+
+    <script src="chat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="load.js"></script>
 </body>
 
 </html>
