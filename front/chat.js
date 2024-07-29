@@ -2,6 +2,39 @@ const chatBox = document.getElementById('chatBox');
 const userInput = document.getElementById('userInput');
 const startBanner = document.querySelector('.start-banner');
 let isBannerHidden = false;
+let conversationId = null;
+
+// Cargar la conversación del historial si existe
+document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    conversationId = urlParams.get('id');
+
+    if (conversationId) {
+        await loadConversation(conversationId);
+    } else {
+        startBanner.classList.remove('hidden');
+    }
+});
+
+// async function loadConversation(conversationId) {
+//     try {
+//         const response = await fetch(`http://localhost:5000/historial/${conversationId}`);
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+
+//         const data = await response.json();
+//         if (data.status === 'success' && data.conversation) {
+//             const conversation = data.conversation;
+//             conversation.messages.forEach(message => {
+//                 displayMessage(message.text, message.sender);
+//             });
+//             isBannerHidden = true;
+//         }
+//     } catch (error) {
+//         console.error('Error loading conversation:', error);
+//     }
+// }
 
 async function sendMessage() {
     const userMessage = userInput.value;
@@ -23,7 +56,7 @@ async function sendMessage() {
 
     // Send the user message to the server
     try {
-        const response = await fetch('http://localhost:5000/preguntar', { // Replace with your endpoint
+        const response = await fetch('http://localhost:5000/preguntar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,13 +75,19 @@ async function sendMessage() {
         // Display the bot's response
         displayMessage(botMessage, 'bot');
 
-        saveChatHistory();
+        const newMessages = [
+            { sender: 'user', text: userMessage, timestamp: new Date().toISOString() },
+            { sender: 'bot', text: botMessage, timestamp: new Date().toISOString() }
+        ];
+
+        if (conversationId) {
+            await updateConversation(conversationId, newMessages);
+        } else {
+            await createNewConversation(newMessages);
+        }
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
-        // Display a default error message
         displayMessage('There was an error processing your request. Please try again later.', 'bot');
-
-        saveChatHistory();
     }
 }
 
@@ -67,7 +106,6 @@ function displayMessage(message, sender) {
 
         const textElement = document.createElement('div');
         textElement.className = 'bot-text';
-        //textElement.textContent = message;
         textElement.innerHTML = marked.parse(message);
 
         botImgContainer.appendChild(botImg);
@@ -80,49 +118,65 @@ function displayMessage(message, sender) {
     }
 
     chatBox.appendChild(messageElement);
-
-    // Scroll to the bottom
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-async function saveChatHistory() {
-    const messages = [];
-    const messageElements = chatBox.querySelectorAll('.user_message, .bot_message');
-    let firstUserMessage = null; // Variable para almacenar el primer mensaje del usuario
+async function createNewConversation(newMessages) {
+    const firstUserMessage = newMessages.find(msg => msg.sender === 'user').text;
 
-    messageElements.forEach((element, index) => {
-        const sender = element.className.split('_')[0];
-        const text = element.querySelector('.bot-text') ? element.querySelector('.bot-text').innerHTML : element.textContent;
-
-        if (sender === 'user' && firstUserMessage === null) {
-            firstUserMessage = text; // Guardar el primer mensaje del usuario
-        }
-
-        messages.push({ sender, text });
-    });
-
-    // Crear un objeto de conversación completo
     const conversation = {
-        conversationId: new Date().toISOString(), // Generar un ID único para la conversación
-        titulo: firstUserMessage, // Primer mensaje del usuario como título
-        messages: messages,
+        conversationId: new Date().toISOString(),
+        titulo: firstUserMessage,
+        messages: newMessages,
         timestamp: new Date().toISOString()
     };
 
-    // Guardar en localStorage
-    localStorage.setItem('chatHistory', JSON.stringify(conversation));
-
-    // Opcionalmente enviar al servidor
     try {
-        await fetch('http://localhost:5000/historial', { // Reemplaza con tu endpoint
+        const response = await fetch('http://localhost:5000/historial', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ conversation: conversation }),
         });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        if (result.status === 'success') {
+            conversationId = result.conversationId;
+            localStorage.setItem('conversationId', conversationId);
+        } else {
+            console.error('Error creating new conversation:', result.message);
+        }
     } catch (error) {
-        console.error('Failed to save chat history to the server:', error);
+        console.error('Error creating new conversation:', error);
     }
 }
 
+async function updateConversation(conversationId, newMessages) {
+    try {
+        const response = await fetch(`http://localhost:5000/historial/${conversationId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ messages: newMessages }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        if (result.status === 'success') {
+            // Opcionalmente actualizar la UI u otras acciones
+        } else {
+            console.error('Error updating conversation:', result.message);
+        }
+    } catch (error) {
+        console.error('Error updating conversation:', error);
+    }
+}
