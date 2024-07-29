@@ -10,12 +10,16 @@ function preloadVoices() {
     }
 }
 
-// Función para que el icono lea el mensaje en voz alta
+// Function to speak the message
 function speakMessage(element) {
+    // Get the message text
     const message = element.closest('.bot_message').querySelector('p').textContent;
-    const speech = new SpeechSynthesisUtterance(message);
-    speech.lang = 'es-ES'; // Configura el idioma según tus necesidades
-    window.speechSynthesis.speak(speech);
+
+    // Create a new instance of SpeechSynthesisUtterance
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    // Use the speechSynthesis API to speak the message
+    window.speechSynthesis.speak(utterance);
 }
 
 // Función para que el icono copie el mensaje al portapapeles
