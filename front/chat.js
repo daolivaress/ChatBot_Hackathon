@@ -3,6 +3,8 @@ const userInput = document.getElementById('userInput');
 const startBanner = document.querySelector('.start-banner');
 let isBannerHidden = false;
 let conversationId = null;
+let currentUtterance = null;
+
 
 // Cargar la conversación del historial si existe
 document.addEventListener('DOMContentLoaded', async () => {
@@ -207,6 +209,15 @@ function copyToClipboard(text) {
 }
 
 function speakText(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(utterance);
+    if (currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(currentUtterance);
 }
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        speechSynthesis.cancel();
+    }
+});
