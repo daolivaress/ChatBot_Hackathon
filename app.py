@@ -3,9 +3,20 @@ import os
 import google.generativeai as genai
 import pandas as pd
 from config import API_KEY
+from flask_cors import CORS
+from pymongo import MongoClient
+import json
+from bson import ObjectId
 
 
 app = Flask(__name__)
+
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+
+client = MongoClient('mongodb+srv://ainfantem:uhUqtSiXYE4PJCSA@historialbot.xs6zk3t.mongodb.net/?retryWrites=true&w=majority&appName=HistorialBot')
+db = client['chat_db']
+chat_collection = db['chat_history']
 
 # Configurar la API de Google AI
 genai.configure(api_key=API_KEY)
@@ -25,7 +36,7 @@ model = genai.GenerativeModel(
 )
 
 # Cargar y preprocesar los datos
-file_path = 'dataset_combinado.csv'
+file_path = 'procesos_restaurante.csv'
 data = pd.read_csv(file_path)
 data = data[['text_input', 'output']]
 data['text'] = data.apply(lambda row: f"Pregunta: {row['text_input']}\nRespuesta: {row['output']}", axis=1)
@@ -74,11 +85,11 @@ palabras_clave = [
 
     # Seguridad Alimentaria y Salubridad
     "seguridad alimentaria", "medidas", "regulaciones", "sanitarias", "capacitación", 
-    "empleados", "registros", "documentación"
+    "empleados", "registros", "documentación", "hola", "saludos"
 ]
 
 def generar_respuesta(informacion, pregunta):
-    prompt = f"{informacion}\n\nPregunta: {pregunta}\nRespuesta: "
+    prompt = f"{informacion}\n\nPregunta: {pregunta}\nPor favor, proporciona una respuesta en un máximo de 150 palabras.\nRespuesta: "
     chat_session = model.start_chat(history=[])
     response = chat_session.send_message(prompt)
     return response.text
@@ -94,6 +105,58 @@ def preguntar():
         return jsonify({"respuesta": respuesta})
     else:
         return jsonify({"respuesta": "Lo siento, solo puedo responder preguntas relacionadas con la información proporcionada."})
+    
+@app.route('/historial', methods=['POST'])
+def save_history():
+    data = request.get_json()
+    conversation = data.get("conversation")
+    if conversation:
+        chat_collection.insert_one(conversation)
+        return jsonify({"status": "success"}), 200
+    return jsonify({"status": "error", "message": "No conversation provided"}), 400
 
+@app.route('/historial', methods=['GET'])
+def get_history():
+    # Recuperar todas las conversaciones almacenadas en la base de datos
+    conversations = list(chat_collection.find())
+    
+    # Convertir el cursor a una lista de diccionarios y eliminar el campo `_id`
+    for conversation in conversations:
+        conversation['_id'] = str(conversation['_id'])
+    
+    return jsonify(conversations)
+
+@app.route('/historial/<conversation_id>', methods=['GET'])
+def get_history_item(conversation_id):
+    try:
+        item = chat_collection.find_one({"conversationId": conversation_id})
+        if item:
+            item['_id'] = str(item['_id'])  # Convertir ObjectId a cadena
+            return jsonify(item)
+        return jsonify({"status": "error", "message": "Item not found"}), 404
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
+
+@app.route('/historial/<conversation_id>', methods=['PUT'])
+def update_history_item(conversation_id):
+    try:
+        data = request.get_json()
+        new_messages = data.get("messages")
+        if not new_messages:
+            return jsonify({"status": "error", "message": "No messages provided"}), 400
+
+        # Encontrar la conversación y actualizar los mensajes
+        result = chat_collection.update_one(
+            {"conversationId": conversation_id},
+            {"$push": {"messages": {"$each": new_messages}}}
+        )
+
+        if result.matched_count == 0:
+            return jsonify({"status": "error", "message": "Conversation not found"}), 404
+
+        return jsonify({"status": "success"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
+    
 if __name__ == "__main__":
     app.run(port=5000)
