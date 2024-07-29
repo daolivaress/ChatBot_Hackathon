@@ -108,9 +108,25 @@ function displayMessage(message, sender) {
         textElement.className = 'bot-text';
         textElement.innerHTML = marked.parse(message);
 
+        const botActions = document.createElement('div');
+        botActions.className = 'bot-actions';
+        
+        const soundIcon = document.createElement('span');
+        soundIcon.className = 'icon-sound-alt';
+        soundIcon.addEventListener('click', () => speakText(textElement.innerHTML));
+
+        
+        const copyIcon = document.createElement('span');
+        copyIcon.className = 'icon-content_copy';
+        copyIcon.addEventListener('click', () => copyToClipboard(textElement.textContent));
+
+        botActions.appendChild(soundIcon);
+        botActions.appendChild(copyIcon);
+
         botImgContainer.appendChild(botImg);
         botImgContainer.appendChild(textElement);
         messageElement.appendChild(botImgContainer);
+        messageElement.appendChild(botActions);
     } else {
         const textElement = document.createElement('div');
         textElement.textContent = message;
@@ -179,4 +195,18 @@ async function updateConversation(conversationId, newMessages) {
     } catch (error) {
         console.error('Error updating conversation:', error);
     }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Mensaje copiado al portapapeles');
+        console.log('Text copied to clipboard');
+    }).catch(err => {
+        console.error('Error in copying text: ', err);
+    });
+}
+
+function speakText(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(utterance);
 }

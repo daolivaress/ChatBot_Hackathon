@@ -13,7 +13,7 @@ function preloadVoices() {
 // Function to speak the message
 function speakMessage(element) {
     // Get the message text
-    const message = element.closest('.bot_message').querySelector('p').textContent;
+    const message = element.closest('.bot-text').querySelector('*').textContent;
 
     // Create a new instance of SpeechSynthesisUtterance
     const utterance = new SpeechSynthesisUtterance(message);
@@ -24,7 +24,7 @@ function speakMessage(element) {
 
 // Función para que el icono copie el mensaje al portapapeles
 function copyMessage(element) {
-    const message = element.closest('.bot_message').querySelector('p').textContent;
+    const message = element.closest('.bot-text').querySelector('*').textContent;
     navigator.clipboard.writeText(message).then(() => {
         alert('Mensaje copiado al portapapeles');
     }).catch(err => {
