@@ -235,9 +235,10 @@ svg {
 }
 
 .resaltado {
-  background: linear-gradient(yellow, orange);
+  background: rgb(238, 206, 1);
   background-clip: text;
   color: transparent;
+  font-weight: 700;
 }
 
 .descripcion {

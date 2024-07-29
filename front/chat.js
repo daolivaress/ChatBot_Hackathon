@@ -38,7 +38,7 @@ async function sendMessage() {
         const data = await response.json();
         console.log(data);
         const botMessage = data.respuesta || 'Sorry, I didn\'t get that.';
-        
+
         // Display the bot's response
         displayMessage(botMessage, 'bot');
 
@@ -93,7 +93,7 @@ async function saveChatHistory() {
     messageElements.forEach((element, index) => {
         const sender = element.className.split('_')[0];
         const text = element.querySelector('.bot-text') ? element.querySelector('.bot-text').innerHTML : element.textContent;
-        
+
         if (sender === 'user' && firstUserMessage === null) {
             firstUserMessage = text; // Guardar el primer mensaje del usuario
         }
@@ -125,3 +125,4 @@ async function saveChatHistory() {
         console.error('Failed to save chat history to the server:', error);
     }
 }
+

@@ -10,8 +10,8 @@ body {
 
 @font-face {
   font-family: 'icomoon';
-  src:  url('icomoon.eot?cuuh3s');
-  src:  url('icomoon.eot?cuuh3s#iefix') format('embedded-opentype'),
+  src: url('icomoon.eot?cuuh3s');
+  src: url('icomoon.eot?cuuh3s#iefix') format('embedded-opentype'),
     url('icomoon.ttf?cuuh3s') format('truetype'),
     url('icomoon.woff?cuuh3s') format('woff'),
     url('icomoon.svg?cuuh3s#icomoon') format('svg');
@@ -20,7 +20,8 @@ body {
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
   speak-as: never;
@@ -39,28 +40,34 @@ body {
   content: "\e904";
   font-size: 18px;
 }
+
 .icon-sun:before {
   content: "\e903";
   font-size: 16px;
 }
+
 .icon-weather:before {
   content: "\e903";
   font-size: 30px;
 }
+
 .icon-search:before {
   content: "\e902";
   font-size: 30px;
 }
+
 .icon-question-circle-o:before {
   content: "\f29c";
   font-size: 30px;
   transition: 0.5s;
 }
+
 .icon-home-outline:before {
   content: "\e900";
   font-size: 30px;
   transition: 0.5s;
 }
+
 .icon-history:before {
   content: "\e901";
   font-size: 30px;
@@ -115,11 +122,11 @@ label::after {
   visibility: hidden;
 }
 
-#darkmode-toggle:checked + label {
+#darkmode-toggle:checked+label {
   background: #242424;
 }
 
-#darkmode-toggle:checked + label::after {
+#darkmode-toggle:checked+label::after {
   left: 7px;
   transform: translateX(100%);
   background: linear-gradient(180deg, #777, #3a3a3a);
@@ -145,11 +152,11 @@ label .icon-moon {
   transition: 0.3s;
 }
 
-#darkmode-toggle:checked + label .icon-sun {
+#darkmode-toggle:checked+label .icon-sun {
   color: #7e7e7e;
 }
 
-#darkmode-toggle:checked + label .icon-moon {
+#darkmode-toggle:checked+label .icon-moon {
   color: #fff;
 }
 
@@ -231,6 +238,12 @@ main {
   padding: 3rem;
   max-width: 80%;
   margin-top: 8rem;
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.start-banner.hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .prompt-container {
@@ -283,13 +296,17 @@ a {
   font-weight: 600;
 }
 
-.user-message,
-.bot-message {
+.user_message,
+.bot_message {
   margin-bottom: 20px;
   max-width: 70%;
 }
 
-.user-message {
+.bot-message-container {
+  display: flex;
+}
+
+.user_message {
   background-color: #f1f1f1;
   padding: 10px 20px;
   border-radius: 20px;
@@ -298,7 +315,7 @@ a {
   margin-right: 20px;
 }
 
-.bot-message {
+.bot_message {
   padding: 10px 20px;
   align-self: flex-start;
   text-align: left;
@@ -329,6 +346,7 @@ a {
   padding: 6px;
   border-radius: 4px;
   background-color: rgba(168, 165, 165, 0.2);
+  cursor: pointer;
 }
 
 .dark-mode body {
@@ -380,12 +398,12 @@ a {
   background: #ffe600;
 }
 
-.dark-mode .user-message,
-.dark-mode .bot-message {
+.dark-mode .user_message,
+.dark-mode .bot_message {
   color: white;
 }
 
-.dark-mode .user-message {
+.dark-mode .user_message {
   background-color: #333;
 }
 
@@ -394,5 +412,6 @@ a {
 }
 
 .dark-mode .bot-actions {
-  color: #ffe600;;
+  color: #ffe600;
+  ;
 }

@@ -75,6 +75,15 @@ body {
   content: "\e905";
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -213,6 +222,56 @@ main {
   color: black;
 }
 
+main {
+  transition: 0.3s;
+  width: 100%;
+}
+
+/* History container styles */
+.history-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 20px;
+}
+
+/* Estilo para los elementos .history-item */
+.history-item {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  width: calc(33% - 32px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.5s ease; /* Transición suave */
+  transform: scale(1); /* Estado inicial */
+  color: #777;
+  cursor: pointer;
+}
+
+/* Aplica la escala en hover */
+.history-item:hover {
+  transform: scale(1.05);
+  color: #1a1a1a;
+  transition: 0.8s;
+}
+
+.history-item h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.dark-mode .history-item {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+}
+
+.dark-mode .history-item:hover {
+  transform: scale(1.05);
+  color: #fff;
+  transition: 0.8s;
+}
+
 .dark-mode .items-item span.clicked {
   color: #ffe600;
 }
@@ -237,3 +296,33 @@ main {
 .dark-mode .items-item:hover {
   color: #ffe600;
 }
+.dark-mode main {
+  background-color: #242424;
+}
+
+.dark-mode .items-item span.clicked {
+  color: #ffe600;
+}
+
+.dark-mode body {
+  background-color: #333;
+  color: #f0f0f0;
+}
+
+.dark-mode nav {
+  background-color: #1a1a1a;
+}
+
+.dark-mode .sidebar {
+  color: #bbb;
+}
+
+.dark-mode .items-item:hover {
+  color: #ffe600;
+}
+
+.dark-mode .items-item:hover {
+  color: #ffe600;
+}
+
+
